@@ -45,3 +45,10 @@ data/processed/*
 *.parquet
 *.sqlite3
 *.db
+
+# Week 08：忽略 PDF 與大量輸出檔，但保留 .keep
+data/raw/**/*.pdf
+data/interim/**/*.md
+data/processed/**/*.json
+!data/interim/**/.keep
+!data/processed/**/.keep

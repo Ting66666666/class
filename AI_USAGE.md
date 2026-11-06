@@ -6,7 +6,7 @@
 
 | 工具 (例：ChatGPT、Gemini、Claude、Copilot) | 版本 / 方案 (例：免費版) | 用在哪幾週 |
 |---|---|---|
-| Claude | 免費版 | Week 04 / 08 |
+| Claude | 免費版 | Week 04 / 08、Week 09 |
 
 ---
 
@@ -66,7 +66,10 @@
 ## Week 09：期中資料報告
 
 - AI 對儀表板的解讀與我的查證，請見 [`DATA_REPORT.md`](DATA_REPORT.md) 第 3.2–3.3 節。
-- 一句話：查證後，我發現 AI 的解讀 ___。
+- 一句話：查證後，我發現 AI 的解讀數字都正確，但因果解釋說得太肯定，兩點查證都只是「部分正確」：它把 chunk 減少全歸給 1-B，可是儀表板看不出是哪個任務造成的；它說熵上升代表雜訊變少，但 `chunk_entropy()` 是算字元頻率，chunk 變長熵本來就會變高。
+- **我請 AI 幫忙做什麼**：解讀 `dashboard.png` 的 4 拼圖結果，並協助整理 `DATA_REPORT.md` 各節的說明文字。
+- **我怎麼確認 AI 的答案是對的**：自己寫程式重新計算 9 份 JSON 的 chunk 數、對照 `metrics.json`、在 VS Code 比較 raw／cleaned 檔案，並實際閱讀 `09_midterm_chunks.ipynb` 指定給我的兩個 chunk。
+- **下次我會怎麼做**：AI 說得越肯定的句子越要回去查證，並且先自己看過資料再問 AI，才能判斷它哪裡說錯。
 
 ---
 

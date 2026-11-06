@@ -41,27 +41,27 @@
 
 ### 2.1 任務 1-A：頁首頁尾溢出清除
 
-- 檔名：___　搜尋的文字：___
+- 檔名：`data/interim/Academic_Affairs/cleaned_A232020018_大學部學則.md`　搜尋的文字：`第五章 轉學`
 - 截圖 (存為 `reports/figures/1a_compare.png`)：![1-A](reports/figures/1a_compare.png)
-- 改變了什麼：___
-- 這對之後的問答檢索有什麼幫助：___
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：___
+- 改變了什麼：PDF 每一頁上方都印有文件名稱「大學部學則」當頁首，Docling 轉換時把它當成 `## 大學部學則` 標題，夾在內文中間。清洗前（左，raw 第 664～668 行）頁首剛好卡在中文章名 `## 第五章 轉學、轉系（組）` 和英文章名 `## Chapter 5 Transfers and Changes of Major` 之間；清洗後（右，cleaned 第 575 行）頁首被刪除，中英文章名也因此能被 1-B 合併成 `## 第五章 轉學、轉系（組） / Chapter 5 Transfers and Changes of Major`。
+- 這對之後的問答檢索有什麼幫助：頁首如果留著，會因為切塊規則 `\n(?=##\s)` 變成一個只有「大學部學則」四個字的空 chunk，檢索時是雜訊；它也會把章名和內文隔開，讓中英文標題無法相鄰而合併失敗。刪除後，章名、英文翻譯和底下的條文能保持在同一個 chunk，檢索到的內容更完整。
+- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：有。同一個檔案 `cleaned_A232020018_大學部學則.md` 開頭（搜尋 `Academic Regulations for Undergraduate Studies`），raw 第 5 行的「大學部學則」是整份文件真正的中文標題，不是頁首，但規則只看文字內容是否等於「大學部學則」，所以連真正的標題也一起刪掉，清洗後的檔案開頭只剩英文名稱，找不到中文文件名稱。
 
 ### 2.2 任務 1-B：雙語標題合併
 
-- 檔名：___　搜尋的文字：___
+- 檔名：`data/interim/Academic_Affairs/cleaned_A232020018_大學部學則.md`　搜尋的文字：`第一篇 總則`
 - 截圖 (存為 `reports/figures/1b_compare.png`)：![1-B](reports/figures/1b_compare.png)
-- 改變了什麼：___
-- 這對之後的問答檢索有什麼幫助：___
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：___
+- 改變了什麼：清洗前（左，raw 第 224～226 行）中文標題 `## 第一篇 總則` 和英文標題 `## Part 1 General Provisions` 是兩個獨立的 `##` 標題，中間隔著空行；清洗後（右，cleaned 第 212 行）合併成一行 `## 第一篇 總則 / Part 1 General Provisions`。
+- 這對之後的問答檢索有什麼幫助：合併前，切塊規則 `\n(?=##\s)` 會把中文標題切成一個只有標題、沒有內文的 chunk，英文標題則帶著內文成為另一個 chunk。合併後中英文標題和內文在同一個 chunk，不論用中文「總則」或英文「General Provisions」搜尋，都能找到完整內容，也減少了沒有內文的空 chunk。
+- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：有。同一個檔案 `cleaned_A232020018_大學部學則.md` 開頭（搜尋 `Academic Regulations for Undergraduate Studies`），raw 原本是校名的中英文標題、文件名稱「大學部學則」、文件英文名稱 `## Academic Regulations for Undergraduate Studies` 四行，清洗後三個不同層次的標題被串成同一行 `## 明志科技大學 / Ming Chi University of Technology / Academic Regulations for Undergraduate Studies`，中文文件名稱「大學部學則」被刪掉，行尾還多出一個 `/`。合併規則只看「相鄰的中英文 `##` 標題」，沒有確認它們是不是同一個標題的翻譯，所以把校名和文件名稱誤合併。
 
 ### 2.3 任務 1-C：雙語條文合併
 
-- 檔名：___　搜尋的文字：___
+- 檔名：`data/interim/Academic_Affairs/cleaned_A232020018_大學部學則.md`　搜尋的文字：`Article 19`
 - 截圖 (存為 `reports/figures/1c_compare.png`)：![1-C](reports/figures/1c_compare.png)
-- 改變了什麼：___
-- 這對之後的問答檢索有什麼幫助：___
-- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：___
+- 改變了什麼：清洗前（左，raw 第 360～363 行）中文條文「第十九條 學生經核准得跨部選修課程……」與英文條文「Article 19 Students may take courses offered by other departments……」是兩個獨立的清單項目，「第二十條」與「Article 20」也一樣；清洗後（右，cleaned 第 322～323 行）每一條的中英文被合併成同一個項目，中間用 ` / ` 連接，例如「第十九條 ……另訂之。 / Article 19 Students may take courses……」。
+- 這對之後的問答檢索有什麼幫助：合併後同一條規定的中文和英文緊鄰在一起，檢索到其中一種語言時，另一種語言的對應內容也會一起被帶出來，不會發生中文條文和英文條文被分開、各自回答不完整的情況；用英文問也能直接對到正確的中文條號，方便 LLM 引用「第十九條」作答。
+- 這個任務有沒有**改錯**的地方 (把不該改的也改了)？若有，寫出檔名與搜尋的文字；若沒有，寫「沒有發現」：有。同一個檔案 `cleaned_A232020018_大學部學則.md`（搜尋 `formula-not-decoded`），raw 第 228～230 行原本是 Docling 無法辨識而留下的佔位符 `<!-- formula-not-decoded -->`，下一個項目才是「Article 1 The Academic Regulations for Undergraduate Studies」；清洗後（cleaned 第 214 行）合併規則把這個佔位符當成中文條文，和 Article 1 接成 `<!-- formula-not-decoded --> / Article 1 ……`。真正的中文「第一條」在轉換時就遺失了，合併後反而讓這個錯誤更不容易被發現。
 
 ## 3. 評估指標與 AI 解讀查證 (Metrics & Verifying the AI's Interpretation)
 
@@ -72,10 +72,10 @@
 
 | 指標 | Raw | Cleaned (你的) | Cleaned (參考值) |
 |---|---|---|---|
-| [1] 中位數長度 Median Length | 205.0 | 273.0 | |
-| [2] 拓撲錨定率 TAR | 1.0 | 1.0 | |
-| [3] 深度變異量 SDV (選填) | 0.0 | 0.0 | |
-| [4] 中位數資訊熵 Entropy (選填) | 4.72 | 5.05 | |
+| [1] 中位數長度 Median Length | 205.0 | 273.0 | 270.5 |
+| [2] 拓撲錨定率 TAR | 1.0 | 1.0 | 1.0 |
+| [3] 深度變異量 SDV (選填) | 0.0 | 0.0 | 0.0 |
+| [4] 中位數資訊熵 Entropy (選填) | 4.72 | 5.05 | 5.06 |
 
 > **儀表板截圖：** 你自己的 `01_Data_Ingestion.ipynb` **第 6 節**輸出的 4 拼圖儀表板 (第 8 週執行並保留的輸出)。截圖後存為 `reports/figures/dashboard.png`。第 3.2 節也會用到這張截圖。
 
@@ -83,7 +83,7 @@
 
 你的 Cleaned 結果與參考值一致嗎？若一致，寫「一致」；若不一致，找出原因。（1 句）
 
-___
+不一致：TAR 與 SDV 相同，但我的中位數長度 273.0 高於參考值 270.5、中位數熵 5.054 略低於 5.062，而且連清洗前的 Raw 熵也不同（我 4.720、參考 4.723），表示差異有一部分在清洗前就存在，可能是 Docling／RapidOCR 轉換 PDF 的結果不完全相同，另一部分則來自我的 1-A～1-C 正則與參考版本不同（例如第 2 節發現的誤刪「大學部學則」標題、誤合併 `formula-not-decoded`），讓部分 chunk 的合併結果和長度不一樣。
 
 ### 3.2 AI 的解讀
 
@@ -176,20 +176,27 @@ Raw 和 Cleaned 都是 1.0，表示 100% 的 chunk 都以 Markdown 標題開頭�
 > 例如：只有標題沒有內文、表格亂掉、中英文沒有對齊、還有殘留的頁首頁尾、斷行造成的多餘空白，或是**清洗造成的錯誤** (誤合併、誤刪除)。
 > **不可**使用第 3.4 節的兩個 chunk。
 
-- **檔名** (`cleaned_*.md`)：___　**從第 ___ 行開始** (VS Code 左側的行號)　**標題**：___
-- **我是怎麼找到的** (例如：搜尋了什麼、看了哪個檔案)：___
+- **檔名** (`cleaned_*.md`)：`data/interim/Academic_Affairs/cleaned_A232020018_大學部學則.md`　**從第 499 行開始** (VS Code 左側的行號)　**標題**：`## 第四章 請假、休學、復學、退學 / Chapter 4 Excused Absences, Leaves of Absence (Suspension), Resumption of ...`
+- **我是怎麼找到的** (例如：搜尋了什麼、看了哪個檔案)：在做第 2 節 1-A 截圖時，用 VS Code 比較檢視對照 `raw_A232020018_大學部學則.md` 與 `cleaned_A232020018_大學部學則.md`，搜尋 `大學部學則` 找頁首，在 raw 第 660～661 行附近發現第五十二條的中文被切成兩行；再打開 cleaned 檔用 `Ctrl + G` 跳到第 572 行確認，清洗後仍然斷開。
 - **問題 chunk (貼上部分內容)**：
 
 ```text
-（貼上）
+第五十一條　學生有下列情形之一者，應予開除學籍：
+
+- 一、有本學則第十條情形之一者。
+- 二、本學則第五十條第一項第八款勒令退學者。 / Article 51 Students shall be expelled from the University under any of the following circumstances:
+1. Students who are involved in one of the circumstances listed in Article 10 of the Academic Regulations.
+2. Those who are ordered to withdraw from Article 50, Paragraph 1, Item 8 of the Academic Regulations.
+- 第五十二條　學生退學由學校發給轉學或修業證明書，但入學資格未經
+- 核准或開除學籍者，不發給任何修業證明文件。 / Article 52 When a student withdraws from school, the school will issue a transfer or study certificate. However, if the admission qualification is not approved or the student is expelled, no certificate of study will be issued.
 ```
 
-- **問題是什麼**：___
-- **可能的原因** (PDF 本身？Docling 轉換？清洗的正則表示式？切塊規則？)：___
-- **具體的修正方法** (例如：一條規則、一個正則表示式的構想、長度上限)：___
-- **對問答檢索的影響**：___
+- **問題是什麼**：有兩個問題。(1) 第五十二條的中文在「未經」和「核准」之間被切成兩個清單項目（第 572、573 行），一句話被拆開，前半句意思不完整；1-C 合併時只把後半句「核准或開除學籍者……」和 `Article 52` 接在一起，前半句「第五十二條　學生退學由學校發給轉學或修業證明書」反而沒有對應的英文。(2) 第五十一條的英文 `Article 51 ...` 沒有接在中文條文「第五十一條……應予開除學籍：」後面，而是被接到最後一個子項「二、……勒令退學者。」後面（第 569 行），英文的子項 `1.`、`2.` 也和中文子項分開，中英文對不齊。
+- **可能的原因** (PDF 本身？Docling 轉換？清洗的正則表示式？切塊規則？)：(1) PDF 換頁：第五十二條剛好跨頁，Docling 轉換時把下一頁開頭的「核准或開除學籍者……」當成新的清單項目，前面加上 `- `；1-A 刪掉頁首後也沒有把斷開的兩行接回來。(2) 1-C 的正則表示式只看「中文清單項目的下一個項目是不是 `Article N` 開頭」，就把它接到前一個項目後面；它沒有檢查前一個項目是不是以「第 N 條」開頭、條號是否和 `Article N` 相同，所以第五十一條的英文被接到子項「二、」，第五十二條的英文只接到後半句。
+- **具體的修正方法** (例如：一條規則、一個正則表示式的構想、長度上限)：(1) 新增「斷句接回」規則：如果一個清單項目不是以句號「。」、冒號「：」結尾，而下一個項目不是以「第…條」、「一、」或 `Article` 開頭，就把兩行合併成一行，例如用 `re.sub(r"([^。：；\n])\n- (?!第[一二三四五六七八九十百]+條|[一二三四五六七八九十]+、|Article)", r"\1", text)`。(2) 1-C 合併時先抓出中文的條號（「第五十一條」→ 51）和英文的 `Article (\d+)`，只有兩邊號碼相同才合併，並把英文接在**整條中文（含所有子項）**的最後，而不是接在前一行。
+- **對問答檢索的影響**：如果使用者問「被開除學籍的學生拿得到修業證明嗎？」，檢索可能只抓到前半句「學生退學由學校發給轉學或修業證明書」，LLM 會誤答「可以拿到」，漏掉後面「但入學資格未經核准或開除學籍者，不發給」的例外規定，答案剛好相反。另外，這個 chunk 從第 499 行一路包含第四章所有條文，直到第 574 行才結束，內容很長、主題很多，向量語意被稀釋，也會讓第五十一、五十二條更不容易被精準檢索到。
 
 ## 5. AI 協作 (AI Collaboration)
 
 - 本次作業的 AI 協作紀錄請見 [`AI_USAGE.md`](AI_USAGE.md) 的「Week 04 / 08」與「Week 09」段落。
-- 這次使用 AI 最大的收穫或教訓是 ___（請具體：例如提示詞中哪一段最關鍵、AI 哪一句解讀不正確）
+- 這次使用 AI 最大的收穫或教訓是：AI 解讀儀表板時說得很肯定，但不一定正確。例如它說「熵提高表示雜訊變少、資訊密度變高」，可是我回去看 `chunk_entropy()` 才發現熵是用字元頻率計算，chunk 變長熵本來就會變高，所以熵上升不一定代表品質變好；它也把 chunk 減少全部歸給 1-B，但儀表板本身看不出是哪個任務造成的。教訓是 AI 的解讀只能當作假設，要回到程式碼、`metrics.json` 和實際的 chunk 去驗證，尤其要看我自己被指定的 chunk 和 raw／cleaned 的比較檔，才知道清洗真正做了什麼、還有哪裡改錯。

@@ -18,3 +18,7 @@ matplotlib
 # 
 # (Future packages for NLP, ML, and APIs will be added dynamically.)
 # =====================================================================
+jieba
+rank_bm25
+scikit-learn
+sentence-transformers

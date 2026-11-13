@@ -37,3 +37,26 @@
 - [x] **觀測儀表板與報告**：
   - [x] 成功繪製 4 拼圖資料觀測儀表板 (4-Panel Dashboard)。
   - [x] 成功將核心評估指標匯出為根目錄下的 `metrics.json`。
+  
+### Week 10: Keyword vs Semantic Retrieval（關鍵字檢索 vs 語意檢索）
+- [x] **環境設定**：完成 `10_setup.ipynb`，安裝 `jieba`、`rank_bm25`、`scikit-learn`、`sentence-transformers`，並更新 `requirements.txt` 與 `.gitignore`（`models/`、`data/embeddings/` 不上傳）。
+- [x] **關鍵字檢索 (Keyword Retrieval)**：
+  - [x] 用 jieba 斷詞，實作 TF-IDF 檢索。
+  - [x] 1-B 實作 BM25 檢索（`search_bm25`）。
+- [x] **語意檢索 (Semantic Retrieval)**：
+  - [x] 2-A 實作 cosine 相似度。
+  - [x] 2-B 用句向量模型 `BAAI/bge-small-zh-v1.5` 實作語意檢索（`search_dense`）。
+- [x] **檢索比較**：用 10 個校規問題人工判斷 hit@3，並自行設計 2 個問題。
+
+  | 方法 | 全部 | 用詞相同 | 換句話說 |
+  |---|---|---|---|
+  | TF-IDF | 0.4 | 0.8 | 0.0 |
+  | BM25 | 0.5 | 1.0 | 0.0 |
+  | Dense | 0.8 | 1.0 | 0.6 |
+
+  結論：用詞相同時三種方法都不錯；口語、換句話說時，語意檢索明顯比較好。
+- [x] **新增的檔案**：
+  - [x] `notebooks/10_setup.ipynb`：課前設定。
+  - [x] `notebooks/10_vector_similarity.ipynb`：本週作業（保留輸出）。
+  - [x] `week10_retrieval_comparison.json`：檢索比較結果。
+  - [x] `AI_USAGE.md` 新增 Week 10 段落。
